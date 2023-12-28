@@ -13,16 +13,8 @@ terraform {
   }*/
 }
 
-provider "azurerm" {
-  features {}
-}
 
-resource "azurerm_resource_group" "rg1" {
-  name     = var.rgname
-  location = var.location
-}
-
-resource "azurerm_storage_account" "tfstate" {
+/*resource "azurerm_storage_account" "tfstate" {
   depends_on = [ 
     azurerm_resource_group.rg1 
   ]
@@ -40,4 +32,4 @@ resource "azurerm_storage_container" "tfstate" {
   name                  = var.azurerm_storage_container
   storage_account_name  = azurerm_storage_account.tfstate.name
   container_access_type = "blob"
-}
+}*/
