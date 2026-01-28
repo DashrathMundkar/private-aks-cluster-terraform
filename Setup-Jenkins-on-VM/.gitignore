@@ -6,3 +6,5 @@ terraform.tfstate.backup
 .idea/
 .vscode/
 .tfvars.json
+*.tfvars
+!*.auto.tfvars
