@@ -30,3 +30,17 @@ resource "azurerm_virtual_machine" "vm-name" {
     }
 }
 
+resource "azurerm_virtual_machine_extension" "jenkins_setup" {
+  name                 = "JenkinsSetupExtension"
+  virtual_machine_id   = azurerm_virtual_machine.vm-name.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
+
+  protected_settings = jsonencode({
+    script = base64encode(file("${path.module}/jenkins_setup.sh"))
+  })
+
+  depends_on = [azurerm_virtual_machine.vm-name]
+}
+
