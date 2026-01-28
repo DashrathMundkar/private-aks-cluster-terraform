@@ -14,8 +14,7 @@ resource "azurerm_subnet" "subnet1" {
   name             = "subnet1"
   address_prefixes = ["10.1.0.0/24"]
   resource_group_name = var.rgname
-  virtual_network_name = azurerm_virtual_network.virtual_network.name
-  enforce_private_link_endpoint_network_policies = true
+  virtual_network_name = azurerm_virtual_network.virtual_network.name  
 }
 
 resource "azurerm_virtual_network" "virtual_network_new" {
