@@ -16,7 +16,7 @@ resource "azurerm_resource_group" "rg1" {
 
 module "cluster" {
   depends_on = [ azurerm_resource_group.rg1 ]
-  source = "./cluster"
+  source = "cluster"
   location = var.location
   security_group = var.security_group
   azurerm_virtual_network = var.azurerm_virtual_network
