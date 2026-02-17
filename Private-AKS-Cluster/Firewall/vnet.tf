@@ -16,6 +16,15 @@ resource "azurerm_subnet" "firewall_subnet" {
   address_prefixes     = ["172.16.1.0/24"]
 }
 
+resource "azurerm_subnet" "pep" {
+  name                 = "pep-subnet"
+  resource_group_name  = azurerm_resource_group.firewall_rg.name
+  virtual_network_name = azurerm_virtual_network.firewall_vnet.name
+  address_prefixes     = ["172.16.2.0/24"]
+  private_endpoint_network_policies         = "Enabled"
+  
+}
+
 /*resource "azurerm_nat_gateway" "firewall_nat_gateway" {
   name                = "${var.firewall_name}-nat-gateway"
   location            = var.location

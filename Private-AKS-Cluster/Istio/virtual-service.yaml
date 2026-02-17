@@ -13,7 +13,9 @@ spec:
   http:
     - match:
         - uri:
-            prefix: /  # Match all URIs
+            prefix: /ccdb/app  # Match all URIs
+      rewrite:
+        uri: /  # Rewrite to root
       route:
         - destination:
             host: nginx-lb.nginx.svc.cluster.local

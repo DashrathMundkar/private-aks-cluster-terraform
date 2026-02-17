@@ -1,7 +1,3 @@
-/*data "azurerm_resource_group" "k8s" {
-  name = var.rgname
-}*/
-
 resource "azurerm_kubernetes_cluster" "k8s" {
   name                        = var.rgname
   location                    = var.location
@@ -73,11 +69,11 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 }
 
 
-/*resource "azurerm_role_assignment" "custom_reader" {
-  scope                = data.azurerm_resource_group.k8s.id
+resource "azurerm_role_assignment" "custom_reader" {
+  scope                = azurerm_kubernetes_cluster.k8s.id
   role_definition_name = "Reader"
   principal_id         = azurerm_kubernetes_cluster.k8s.identity[0].principal_id
-}*/
+}
 
 resource "azurerm_role_definition" "aks-network" {
   name              = "CustomNetworkRole" # We had issue with sameNameExists so hence we prefixed with custome
