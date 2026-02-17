@@ -9,14 +9,6 @@ variable "location" {
   
 }
 
-/*variable "storage_account_name" {
-  type = string
-}
-
-variable "azurerm_storage_container" {
-  type = string
-}*/
-
 variable "security_group" {
   type = string
 }
@@ -36,3 +28,21 @@ variable "azurerm_lb" {
 variable "publicip" {
   type = string
 }
+
+variable "subscription_id" {
+  type = string
+}
+
+variable "location_short_name" {
+  type = string
+}
+
+variable "tags" {
+  type        = map(any)
+  description = "The default tags to add to all resources"
+}
+
+variable "firewall_private_ip" {
+  type = string
+  default = ""
+}  
