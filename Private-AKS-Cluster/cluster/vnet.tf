@@ -4,6 +4,7 @@ resource "azurerm_virtual_network" "virtual_network" {
   location            = var.location
   resource_group_name = var.rgname
   address_space       = ["10.0.0.0/16"]
+  #dns_servers = ["209.244.0.3", "209.244.0.4"]
 
   tags = {
     environment = "${var.tags.env}"

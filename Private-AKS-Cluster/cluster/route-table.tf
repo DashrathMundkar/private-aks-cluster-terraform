@@ -1,9 +1,10 @@
-/*data "azurerm_public_ip" "firewall_public_ip" {
+data "azurerm_public_ip" "firewall_public_ip" {
   name                = "aks-firewall-public-ip"
   resource_group_name = "firewall-rg"
-}*/
+}
 
 resource "azurerm_route_table" "dev_route_table" {
+  depends_on = [ azurerm_resource_group.rg1 ]
   name                = "dev-route-table"
   resource_group_name = var.rgname
   location            = var.location
@@ -15,12 +16,6 @@ resource "azurerm_route_table" "dev_route_table" {
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = var.firewall_private_ip
   }
-
-  /*route {
-    name           = "firewall-public-ip-to-internet"
-    address_prefix = "${data.azurerm_public_ip.firewall_public_ip.ip_address}/32"
-    next_hop_type  = "Internet"
-  }*/
 }
 
 resource "azurerm_subnet_route_table_association" "aks_subnet_route_table_association" {

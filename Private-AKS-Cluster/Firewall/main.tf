@@ -21,7 +21,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw-rules" {
 
   nat_rule_collection {
     action   = "Dnat"
-    name     = "NAT_INGRESS_DEV"
+    name     = "DNAT_NAT_INGRESS_DEV"
     priority = 100
 
     rule {
@@ -48,9 +48,17 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw-rules" {
   }
 
   network_rule_collection {
-    name     = "aksfwnr"
-    priority = 105
+    name     = "NetRuleCollection"
+    priority = 200
     action   = "Allow"
+
+    rule {
+      name                  = "AllowDNS"
+      protocols             = ["UDP"]
+      source_addresses      = [data.azurerm_subnet.aks_subnet.address_prefix]
+      destination_addresses = ["209.244.0.3","209.244.0.4"]
+      destination_ports     = ["53"]
+    }
 
     rule {
       name                  = "apitcp"
@@ -67,40 +75,40 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw-rules" {
       destination_addresses = ["AzureCloud.${var.location}"]
       destination_ports     = ["1194"]
     }
-
     rule {
-      name              = "time"
+      name              = "ntpudp"
       protocols         = ["UDP"]
       source_addresses  = ["*"]
-      destination_fqdns = ["ntp.ubuntu.com"]
+      destination_addresses = ["185.125.190.57"]
       destination_ports = ["123"]
-    }
-
-    rule {
-      name              = "ghcr"
-      protocols         = ["TCP"]
-      source_addresses  = ["*"]
-      destination_fqdns = ["ghcr.io", "pkg-containers.githubusercontent.com"]
-      destination_ports = ["443"]
-    }
-
-    rule {
-      name              = "docker"
-      protocols         = ["TCP"]
-      source_addresses  = ["*"]
-      destination_fqdns = ["docker.io", "registry-1.docker.io", "production.cloudflare.docker.com"]
-      destination_ports = ["443"]
     }
   }
 
   application_rule_collection {
-    name     = "aksfwar"
-    priority = 110
+    name     = "AppRuleCollection"
+    priority = 200
     action   = "Allow"
+    
+    rule {
+      name             = "AllowDockerHubANDUbuntu"
+      source_addresses = [data.azurerm_subnet.aks_subnet.address_prefix]
+
+      protocols {
+        type = "Http"
+        port = 80
+      }
+
+      protocols {
+        type = "Https"
+        port = 443
+      }
+
+      destination_fqdns = ["docker.io", "registry-1.docker.io", "production.cloudflare.docker.com", "auth.docker.io", "index.docker.io", "login.docker.com", "archive.ubuntu.com", "security.ubuntu.com"]
+    }
 
     rule {
-      name             = "fqdn"
-      source_addresses = ["*"]
+      name             = "AllowAzureKubernetesService"
+      source_addresses = [data.azurerm_subnet.aks_subnet.address_prefix]
 
       protocols {
         type = "Http"
@@ -114,5 +122,21 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw-rules" {
 
       destination_fqdn_tags = ["AzureKubernetesService"]
     }
+    rule {
+      name             = "AllowGoogle"
+      source_addresses = ["*"]
+
+      protocols {
+        type = "Http"
+        port = 80
+      }
+
+      protocols {
+        type = "Https"
+        port = 443
+      }
+
+      destination_fqdns = ["www.google.com"]
+    }
+    }
   }
-}

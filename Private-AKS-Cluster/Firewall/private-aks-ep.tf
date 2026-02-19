@@ -1,4 +1,4 @@
-data "azurerm_kubernetes_cluster" "dev-aks" {
+/*data "azurerm_kubernetes_cluster" "dev-aks" {
   name                = "dev-core"
   resource_group_name = "dev-core"
 }
@@ -21,7 +21,7 @@ resource "azurerm_private_endpoint" "dev-k8s" {
       private_service_connection
     ]
   }
-}
+}*/
 
 
 /*data "azurerm_private_link_service" "dev-ingress-intranet" {

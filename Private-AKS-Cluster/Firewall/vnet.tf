@@ -13,7 +13,7 @@ resource "azurerm_subnet" "firewall_subnet" {
   name                 = var.firewall_subnet_name
   resource_group_name  = azurerm_resource_group.firewall_rg.name
   virtual_network_name = azurerm_virtual_network.firewall_vnet.name
-  address_prefixes     = ["172.16.1.0/24"]
+  address_prefixes     = ["172.16.1.0/26"]
 }
 
 resource "azurerm_subnet" "pep" {
@@ -25,7 +25,7 @@ resource "azurerm_subnet" "pep" {
   
 }
 
-data "azurerm_virtual_network" "aks_virtual_network" {
+/*data "azurerm_virtual_network" "aks_virtual_network" {
   name                = "dev-core-vnet"
   resource_group_name = "dev-core"
 }
@@ -36,4 +36,4 @@ resource "azurerm_virtual_network_peering" "firewall_to_aks" {
   remote_virtual_network_id = data.azurerm_virtual_network.aks_virtual_network.id
   allow_forwarded_traffic   = true
   allow_virtual_network_access = true
-}
+}*/

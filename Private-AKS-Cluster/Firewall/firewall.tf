@@ -4,7 +4,6 @@ resource "azurerm_firewall" "aks_firewall" {
   location            = var.location
   sku_name            = "AZFW_VNet"
   sku_tier            = "Standard"
-  dns_proxy_enabled = true
   
   
 
