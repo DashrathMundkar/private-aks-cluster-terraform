@@ -1,4 +1,4 @@
-resource "azurerm_private_link_service" "ingress_intranet" {
+/*resource "azurerm_private_link_service" "ingress_intranet" {
   name                = "pl-ingress-intranet"
   resource_group_name = var.rgname
   location            = var.location
@@ -20,4 +20,4 @@ resource "azurerm_private_link_service" "ingress_intranet" {
     subnet_id = azurerm_subnet.ingress_subnet.id
     primary   = false
   }
-}
+}*/

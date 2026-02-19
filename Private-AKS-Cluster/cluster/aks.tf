@@ -1,4 +1,5 @@
 resource "azurerm_kubernetes_cluster" "k8s" {
+  depends_on = [ azurerm_subnet.aks_subnet]
   name                        = var.rgname
   location                    = var.location
   resource_group_name         = var.rgname
