@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
+  namespace: nginx
 spec:
   replicas: 1
   selector:
@@ -15,12 +16,13 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:latest
+        image: nginx
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-lb
+  name: nginx
+  namespace: nginx
 spec:
   selector:
     app: nginx

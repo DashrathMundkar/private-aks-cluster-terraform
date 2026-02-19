@@ -4,6 +4,8 @@ resource "azurerm_firewall" "aks_firewall" {
   location            = var.location
   sku_name            = "AZFW_VNet"
   sku_tier            = "Standard"
+  dns_proxy_enabled = true
+  
   
 
   ip_configuration {
@@ -11,12 +13,6 @@ resource "azurerm_firewall" "aks_firewall" {
     subnet_id            = azurerm_subnet.firewall_subnet.id
     public_ip_address_id = azurerm_public_ip.firewall_public_ip.id
   }
-
-  ip_configuration {
-    name                 = "DEV_1"
-    public_ip_address_id = azurerm_public_ip.ip-dev-1.id
-  }
-  
 }
 
 resource "azurerm_firewall_policy" "dev-firewall-policy" {

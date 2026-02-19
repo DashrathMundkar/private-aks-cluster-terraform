@@ -9,67 +9,110 @@ data "azurerm_virtual_network" "dev-vn" {
 }
 
 data "azurerm_subnet" "aks_subnet" {
-  name                 = "aks-subnet" 
+  name                 = "aks-subnet"
   virtual_network_name = data.azurerm_virtual_network.dev-vn.name
   resource_group_name  = data.azurerm_virtual_network.dev-vn.resource_group_name
 }
 
 resource "azurerm_firewall_policy_rule_collection_group" "fw-rules" {
-    name                = "dev-rule-collection-group"
-    firewall_policy_id  = azurerm_firewall_policy.dev-firewall-policy.id
-    priority            = 500
-  
+  name               = "dev-rule-collection-group"
+  firewall_policy_id = azurerm_firewall_policy.dev-firewall-policy.id
+  priority           = 500
+
   nat_rule_collection {
-    action = "Dnat"
-    name   = "NAT_INGRESS_DEV"
-    priority = 305
+    action   = "Dnat"
+    name     = "NAT_INGRESS_DEV"
+    priority = 100
+
     rule {
-      name                       = "DEV_INGRESS_HTTP"
-      description                = "DNAT rule to allow inbound traffic to AKS API server"
-      source_addresses           = ["*"]
-      destination_address        = azurerm_public_ip.ip-dev-1.ip_address
-      destination_ports          = ["80"]
-      protocols                  = ["TCP"]
-      translated_address         = "172.16.2.6" # kuberntes internal load balancer IP created by istio service of type LoadBalancer
-      translated_port            = "80"
+      name                = "DEV_INGRESS_HTTP"
+      description         = "DNAT rule to allow inbound traffic to AKS ingress"
+      source_addresses    = ["*"]
+      destination_address = azurerm_public_ip.firewall_public_ip.ip_address
+      destination_ports   = ["80"]
+      protocols           = ["TCP"]
+      translated_address  = "10.0.1.64"
+      translated_port     = "80"
     }
+
     rule {
-      name                       = "DEV_INGRESS_HTTPS"
-      description                = "DNAT rule to allow inbound traffic to AKS API server"
-      source_addresses           = ["*"]
-      destination_address        = azurerm_public_ip.ip-dev-1.ip_address
-      destination_ports          = ["443"]
-      protocols                  = ["TCP"]
-      translated_address         = "172.16.2.6" # kuberntes internal load balancer IP created by istio service of type LoadBalancer
-      translated_port            = "443"
+      name                = "DEV_INGRESS_HTTPS"
+      description         = "DNAT rule to allow inbound traffic to AKS ingress"
+      source_addresses    = ["*"]
+      destination_address = azurerm_public_ip.firewall_public_ip.ip_address
+      destination_ports   = ["443"]
+      protocols           = ["TCP"]
+      translated_address  = "10.0.1.64"
+      translated_port     = "443"
     }
   }
-  application_rule_collection {
-    action = "Allow"
-    name = "Allow-Docker-Hub"
-    priority = 315
+
+  network_rule_collection {
+    name     = "aksfwnr"
+    priority = 105
+    action   = "Allow"
+
     rule {
-      name                       = "Allow-Docker-Hub"
-      description                = "Application rule to allow inbound traffic to Docker Hub"
-      source_addresses           = [data.azurerm_subnet.aks_subnet.address_prefix]
-      destination_fqdns           = ["*"]
+      name                  = "apitcp"
+      protocols             = ["TCP"]
+      source_addresses      = ["*"]
+      destination_addresses = ["AzureCloud.${var.location}"]
+      destination_ports     = ["9000"]
+    }
+
+    rule {
+      name                  = "apiudp"
+      protocols             = ["UDP"]
+      source_addresses      = ["*"]
+      destination_addresses = ["AzureCloud.${var.location}"]
+      destination_ports     = ["1194"]
+    }
+
+    rule {
+      name              = "time"
+      protocols         = ["UDP"]
+      source_addresses  = ["*"]
+      destination_fqdns = ["ntp.ubuntu.com"]
+      destination_ports = ["123"]
+    }
+
+    rule {
+      name              = "ghcr"
+      protocols         = ["TCP"]
+      source_addresses  = ["*"]
+      destination_fqdns = ["ghcr.io", "pkg-containers.githubusercontent.com"]
+      destination_ports = ["443"]
+    }
+
+    rule {
+      name              = "docker"
+      protocols         = ["TCP"]
+      source_addresses  = ["*"]
+      destination_fqdns = ["docker.io", "registry-1.docker.io", "production.cloudflare.docker.com"]
+      destination_ports = ["443"]
+    }
+  }
+
+  application_rule_collection {
+    name     = "aksfwar"
+    priority = 110
+    action   = "Allow"
+
+    rule {
+      name             = "fqdn"
+      source_addresses = ["*"]
+
+      protocols {
+        type = "Http"
+        port = 80
+      }
+
       protocols {
         type = "Https"
         port = 443
       }
-    }
-  }
-  network_rule_collection {
-    name     = "Allow-AKS-Intranet"
-    priority = 320
-    action   = "Allow"
 
-    rule {
-      name      = "Allow-docker"
-      protocols = ["TCP"]
-      source_addresses = [data.azurerm_subnet.aks_subnet.address_prefix]
-      destination_addresses = ["168.63.129.16"] # Azure infrastructure IP for DNS resolution
-      destination_ports     = ["53"] #ssh clone
+      destination_fqdn_tags = ["AzureKubernetesService"]
     }
   }
 }

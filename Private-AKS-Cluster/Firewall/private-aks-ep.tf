@@ -24,7 +24,7 @@ resource "azurerm_private_endpoint" "dev-k8s" {
 }
 
 
-data "azurerm_private_link_service" "dev-ingress-intranet" {
+/*data "azurerm_private_link_service" "dev-ingress-intranet" {
   name                = "pl-ingress-intranet"
   resource_group_name = "dev-core"
 }
@@ -41,4 +41,4 @@ resource "azurerm_private_endpoint" "dev-ingress-intranet" {
     private_connection_resource_id = data.azurerm_private_link_service.dev-ingress-intranet.id
     # subresource_names MUST be omitted for Private Link Service connections
   }
-}
+}*/

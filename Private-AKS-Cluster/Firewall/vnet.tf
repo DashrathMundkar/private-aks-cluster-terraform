@@ -25,14 +25,15 @@ resource "azurerm_subnet" "pep" {
   
 }
 
-/*resource "azurerm_nat_gateway" "firewall_nat_gateway" {
-  name                = "${var.firewall_name}-nat-gateway"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.firewall_rg.name
-  sku                 = "Standard" 
+data "azurerm_virtual_network" "aks_virtual_network" {
+  name                = "dev-core-vnet"
+  resource_group_name = "dev-core"
 }
-
-resource "azurerm_nat_gateway_public_ip_association" "nat_public_ip_association"{
-  nat_gateway_id = azurerm_nat_gateway.firewall_nat_gateway.id
-  public_ip_address_id   = azurerm_public_ip.nat_gateway_public_ip.id   
-}*/
+resource "azurerm_virtual_network_peering" "firewall_to_aks" {
+  name                      = "firewall-to-aks"
+  resource_group_name = azurerm_resource_group.firewall_rg.name
+  virtual_network_name      = azurerm_virtual_network.firewall_vnet.name
+  remote_virtual_network_id = data.azurerm_virtual_network.aks_virtual_network.id
+  allow_forwarded_traffic   = true
+  allow_virtual_network_access = true
+}

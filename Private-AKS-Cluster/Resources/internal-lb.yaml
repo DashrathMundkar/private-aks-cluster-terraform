@@ -16,37 +16,25 @@ metadata:
     app.kubernetes.io/version: 1.29.0
     helm.sh/chart: gateway-1.29.0
     istio: ingressgateway
-    istio.io/dataplane-mode: none
   name: istio-ingressgateway
   namespace: istio-system
 spec:
   allocateLoadBalancerNodePorts: true
-  clusterIP: 172.20.96.60
-  clusterIPs:
-  - 172.20.96.60
   externalTrafficPolicy: Cluster
   internalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-  - name: status-port
-    nodePort: 31907
-    port: 15021
-    protocol: TCP
-    targetPort: 15021
-  - name: http2
-    nodePort: 31165
+  - name: http
     port: 80
     protocol: TCP
     targetPort: 80
   - name: https
-    nodePort: 30221
     port: 443
     protocol: TCP
     targetPort: 443
   selector:
     app: istio-ingressgateway
     istio: ingressgateway
-  sessionAffinity: None
   type: LoadBalancer
