@@ -1,12 +1,10 @@
 variable "rgname" {
-  type = string
-  description = "resource roup name"
+  type        = string
+  description = "resource group name"
 }
-
 
 variable "location" {
   type = string
-  
 }
 
 variable "security_group" {
@@ -43,6 +41,14 @@ variable "tags" {
 }
 
 variable "firewall_private_ip" {
-  type = string
+  type    = string
   default = ""
-}  
+}
+
+variable "aks_vnet_address_prefix" {
+  type = string
+}
+
+variable "aks_subnet_address_prefix" {
+  type = string
+}
