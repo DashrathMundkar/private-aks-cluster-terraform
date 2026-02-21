@@ -6,7 +6,7 @@
 
 # Can't use data.azurerm_lb for this, because each change to private link services will reload data.azurerm_lb which will then recreate all private link services
   load_balancer_frontend_ip_configuration_ids = [
-    "/subscriptions/62f28128-0f1a-4d05-b22d-8921a5378718/resourceGroups/mc_dev-core_dev-core_westeurope/providers/Microsoft.Network/loadBalancers/kubernetes-internal/frontendIPConfigurations/a6e69ece03ab243aa928da35b2d4bef1"
+    "/subscriptions/ADD_SUBSCRIPTION_ID/resourceGroups/mc_dev-core_dev-core_westeurope/providers/Microsoft.Network/loadBalancers/kubernetes-internal/frontendIPConfigurations/a6e69ece03ab243aa928da35b2d4bef1"
   ]
 
   nat_ip_configuration {

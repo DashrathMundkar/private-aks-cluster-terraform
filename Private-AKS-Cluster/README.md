@@ -71,6 +71,10 @@
   - `kubectl exec -it <nginx-pod> -- curl https://download.opensuse.org` ✅ Should work
   - `kubectl exec -it <nginx-pod> -- curl https://www.google.com` ❌ Should fail (not in whitelist)
 
+
+
+# For latest information about ruels etc check this page https://learn.microsoft.com/en-us/azure/aks/limit-egress-traffic?pivots=system
+
   
 ### Phase 5: Use this for routing traffic to application using azure firewall public ip -> to istio -> pod service -> pod. 
 
