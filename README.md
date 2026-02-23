@@ -1,6 +1,6 @@
 # Azure Infrastructure with Terraform
 
-This repository contains Terraform configurations for deploying Azure Kubernetes Service (AKS) clusters with various networking and security configurations, along with Jenkins setup on Azure VMs.
+This repository contains Terraform configurations for deploying Azure Kubernetes Service (AKS) clusters with various networking and security configurations.
 
 ## Project Structure
 
@@ -24,17 +24,6 @@ Terraform configuration for deploying a public AKS cluster with Istio service me
   - [`kubernetes/`](Public-AKS-Cluster/kubernetes/) - Kubernetes manifests for NGINX deployment, Istio Gateway, and VirtualService
   - [`Istio/`](Public-AKS-Cluster/Istio/) - Istio networking resources (Gateway, VirtualService, internal load balancer)
 - **Key Features:** Public API endpoint, Azure CNI networking with Calico policy, system-assigned managed identity, automatic maintenance windows
-
-### [Setup-Jenkins-on-VM](Setup-Jenkins-on-VM/)
-Terraform configuration to deploy Jenkins on an Azure Virtual Machine.
-- **Files:**
-  - `main.tf` - Core Azure resources (vnet, subnet, NIC, NSG)
-  - `vm.tf` - Virtual machine configuration with custom script extension
-  - `variable.tf` - Input variables for resource configuration
-  - `DEV.tfvars` - Development environment variables
-  - `output.tf` - Output values (VM public IP)
-  - `jenkins_setup.sh` - Bash script to install Java 21, Git, Maven, and Jenkins
-- **Key Features:** Automated Jenkins installation, SSH key-based authentication, security group rules for SSH (22), HTTP (80), HTTPS (443), and Jenkins (8080)
 
 ### [resources](resources/)
 Shared Kubernetes manifests for basic deployments.
@@ -79,12 +68,6 @@ terraform plan -var-file="terraform.tfvars"
 terraform apply -var-file="terraform.tfvars"
 ```
 
-### For Jenkins:
-```bash
-cd Setup-Jenkins-on-VM
-terraform init
-terraform apply -var-file="DEV.tfvars"
-```
 
 ## Key Features
 
@@ -93,7 +76,6 @@ terraform apply -var-file="DEV.tfvars"
 - **Networking:** Virtual networks, subnets, network peering, network policies (Calico)
 - **Service Mesh:** Istio integration for advanced traffic management and observability
 - **Firewall Rules:** Docker Hub, Ubuntu packages, Azure services, and custom application rules
-- **Jenkins:** Automated setup with Java 21, Maven, Git, and pre-configured agent tools
 
 ## Notes
 
