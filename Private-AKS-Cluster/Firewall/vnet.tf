@@ -2,7 +2,7 @@ resource "azurerm_virtual_network" "firewall_vnet" {
   name                = var.firewall_vnet_name
   location            = var.location
   resource_group_name = azurerm_resource_group.firewall_rg.name
-  address_space       = [""]
+  address_space       = [var.vnet_address_prefix]
 
   tags = {
     environment = "${var.tags}"
