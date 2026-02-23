@@ -38,3 +38,6 @@ variable "vnet_address_prefix" {
 variable "pep_subnet_prefix" {
   type = string
 }
+variable "firewall_subnet_prefix" {
+  type = string
+}
