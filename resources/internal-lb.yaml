@@ -4,7 +4,7 @@ metadata:
   annotations:
     meta.helm.sh/release-name: istio-ingressgateway
     meta.helm.sh/release-namespace: istio-system
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true" # This creates ILB from istio service to Azue internal LB
   finalizers:
   - service.kubernetes.io/load-balancer-cleanup
   labels:
